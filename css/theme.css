@@ -1,0 +1,38 @@
+body {
+    margin: 0;
+    font-family: monospace;
+    color: #00ff41;
+    overflow: hidden; /* Hide horizontal scrollbar */
+}
+
+.marquee-container {
+    width: 100%;
+    overflow: hidden; /* This is essential for the marquee effect */
+    border: 2px solid #00ff41;
+    white-space: nowrap;
+}
+
+.marquee-content {
+    display: inline-block;
+    animation: marquee-animation 15s linear infinite;
+}
+
+.marquee-content:hover {
+    animation-play-state: paused; /* Pause on hover */
+}
+
+.marquee-content span {
+    font-size: 2em;
+    padding: 0 0; /* Space between characters */
+}
+
+@keyframes marquee-animation {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%); /* Scroll a full content length */
+    }
+}
+
+
