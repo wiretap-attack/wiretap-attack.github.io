@@ -2,6 +2,7 @@ body {
     margin: 0;
     font-family: monospace;
     color: #00ff41;
+    background-color: darkgray;
     overflow: hidden; /* Hide horizontal scrollbar */
 }
 
