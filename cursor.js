@@ -103,7 +103,7 @@ updateMarqueeText();
       "display": "block",
       "pointerEvents": "none",
       "z-index": "10000000",
-      "fontSize": "20px",
+      "fontSize": "30px",
       "will-change": "transform"
     };
 
