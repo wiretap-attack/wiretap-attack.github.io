@@ -1,2 +1,0 @@
-How did you obtain the consensus seed?
-Any machine can join the Secret Network as a validator as long as it can provide a valid SGX attestation quote containing the node's public encryption key within the attestation report. Once it joins, the node can receive the consensus seed encrypted with its public key. We obtain the consensus seed from the network by forging an SGX attestation quote with our extracted attestation key, and used it to join the Secret test network with a key of our choosing, without ever actually executing an SGX enclave.

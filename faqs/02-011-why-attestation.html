@@ -1,5 +1,0 @@
-Who uses attestation and why? What can you do now that you extracted the attestation key?
-Attestation is used by any party that wishes to verify properties of an enclave execution such as its code, output, or environment. Attestation relies on cryptographic digital signatures rooted in signature keys held by Intel, which ensures a chain of trust from the execution of the enclave on a specific CPU to Intel itself.
-</p>
-<p>
-Since we extracted the CPU's secret attestation key, we break this chain of trust. We can masquerade as a real enclave while in fact running outside of SGX protections, allowing us to read enclave data and even fake its output. The implications of this breach are dependent on the specific system that uses SGX. For applications like Secret it means decrypting all of the network's confidential transactions, while for services like Crust we can fake file storage and collect rewards without actually storing anything.
