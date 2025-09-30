@@ -578,7 +578,7 @@
           <div id="answer-1-9" class="collapse" aria-labelledby="question-1-9">
             <div class="card-body">
               <p>
-                WireTap is considered by Intel to be outside the threat model, as SGX offers no protections against physical attacks. Thus, there are no current mitigations besides running servers in secure physical environments. At the time of publication SGX running on Scalable Xeon servers is vulnerable to memory interposition attacks and we expect this will remain the case in the foreseeable future.
+                WireTap is considered by Intel to be outside the threat model, as SGX offers no protections against physical attacks. Thus, there are no current mitigations besides running servers in secure physical environments. At the time of publication SGX running on Scalable Xeon servers is vulnerable to memory interposition attacks and we expect this will remain the case in the foreseeable future. We also reccomend reviewing <a href="https://www.intel.com/content/www/us/en/developer/articles/news/more-information-encrypted-memory-frameworks.html">Intel's guidance</a> on WireTap and BatteringRAM.
               </p>
             </div>
           </div>
@@ -590,14 +590,14 @@
             <h6>
               <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-1-10"
                 aria-expanded="true" aria-controls="answer-1-10">
-                So what can I do if I want to protect against WireTap?
+                Is there guidance from Intel about WireTap?
               </button>
             </h6>
           </div>
           <div id="answer-1-10" class="collapse" aria-labelledby="question-1-10">
             <div class="card-body">
               <p>
-                We emphasize that SGX aims to defend against software attackers, and the party owning the physical SGX hardware must be trusted. We recommend the usage of cloud providers that you trust and that provide independent physical security. WireTap primarily affects parties which allow any entity to be trusted as long as they run SGX hardware.
+                Yes, Intel has published information and guidance which can be reviewed <a href="https://www.intel.com/content/www/us/en/developer/articles/news/more-information-encrypted-memory-frameworks.html">here</a>.
               </p>
             </div>
           </div>
@@ -609,14 +609,14 @@
             <h6>
               <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-1-11"
                 aria-expanded="true" aria-controls="answer-1-11">
-                What CPUs are affected by this? Why are some CPUs affected and not others?
+                So what can I do if I want to protect against WireTap?
               </button>
             </h6>
           </div>
           <div id="answer-1-11" class="collapse" aria-labelledby="question-1-11">
             <div class="card-body">
               <p>
-                We have tested our attack on 3rd Generation Intel Xeon Scalable Processors. While these support a large Enclave Page Cache (EPC), they also use TME (total memory encryption) for SGX, which itself uses deterministic encryption. </p> <p> Older SGX platforms such as those from Intel's Core and Xeon-E families are not affected, as these use Intel's Memory Encryption (Intel ME) engine, which does not use deterministic memory encryption. However, these platforms also support a much smaller EPC and are about to be deprecated. </p> <p> Next, we are not sure about Xeon-D CPUs, but suspect they also use TME and thus vulnerable to our techniques. Finally, 4th and 5th Generation Intel Xeon Scalable Processors require DDR5 memory, and thus are not vulnerable to our current work. Stay tuned however for more news! 😉
+                We emphasize that SGX aims to defend against software attackers, and the party owning the physical SGX hardware must be trusted. We recommend the usage of cloud providers that you trust and that provide independent physical security. WireTap primarily affects parties which allow any entity to be trusted as long as they run SGX hardware.
               </p>
             </div>
           </div>
@@ -628,14 +628,14 @@
             <h6>
               <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-1-12"
                 aria-expanded="true" aria-controls="answer-1-12">
-                I've heard about the <a href="https://batteringram.eu/">BatteringRAM</a> attack, how is this different?
+                What CPUs are affected by this? Why are some CPUs affected and not others?
               </button>
             </h6>
           </div>
           <div id="answer-1-12" class="collapse" aria-labelledby="question-1-12">
             <div class="card-body">
               <p>
-                WireTap has a similar effect to <a href="https://batteringram.eu">BatteringRAM</a>, and both teams independently discovered their attacks simultaneously without being aware of each other. Like two sides of the same coin, WireTap and BatteringRAM look at complimentary properties of deterministic encryption. While WireTap focuses mainly on breaching confidentiality, BatteringRAM focuses mostly on integrity. The bottom line is the same however, both SGX and SEV are easy to break using memory interposition.
+                We have tested our attack on 3rd Generation Intel Xeon Scalable Processors. While these support a large Enclave Page Cache (EPC), they also use TME (total memory encryption) for SGX, which itself uses deterministic encryption. </p> <p> Older SGX platforms such as those from Intel's Core and Xeon-E families are not affected, as these use Intel's Memory Encryption (Intel ME) engine, which does not use deterministic memory encryption. However, these platforms also support a much smaller EPC and are about to be deprecated. </p> <p> Next, we are not sure about Xeon-D CPUs, but suspect they also use TME and thus vulnerable to our techniques. Finally, 4th and 5th Generation Intel Xeon Scalable Processors require DDR5 memory, and thus are not vulnerable to our current work. Stay tuned however for more news! 😉
               </p>
             </div>
           </div>
@@ -647,11 +647,30 @@
             <h6>
               <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-1-13"
                 aria-expanded="true" aria-controls="answer-1-13">
-                What about other systems such as Intel TDX or AMD SEV? What about DDR5?
+                I've heard about the <a href="https://batteringram.eu/">BatteringRAM</a> attack, how is this different?
               </button>
             </h6>
           </div>
           <div id="answer-1-13" class="collapse" aria-labelledby="question-1-13">
+            <div class="card-body">
+              <p>
+                WireTap has a similar effect to <a href="https://batteringram.eu">BatteringRAM</a>, and both teams independently discovered their attacks simultaneously without being aware of each other. Like two sides of the same coin, WireTap and BatteringRAM look at complimentary properties of deterministic encryption. While WireTap focuses mainly on breaching confidentiality, BatteringRAM focuses mostly on integrity. The bottom line is the same however, both SGX and SEV are easy to break using memory interposition.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="accordion">
+        <div class="card">
+          <div id="question-1-14">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-1-14"
+                aria-expanded="true" aria-controls="answer-1-14">
+                What about other systems such as Intel TDX or AMD SEV? What about DDR5?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-1-14" class="collapse" aria-labelledby="question-1-14">
             <div class="card-body">
               <p>
                 Our work only studies SGX on DDR4 systems. For a similar concurrent work studying both SGX and SEV we invite you to checkout BatteringRAM. However, both SGX and even DDR4 memory is antiquated by now, replaced by newer systems supporting TDX and DDR5. Stay tuned to hear about our work for those systems 😉.
