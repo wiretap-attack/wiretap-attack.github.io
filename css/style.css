@@ -208,7 +208,7 @@ iframe {
   top: 1vh;
   left: 1vw;
   z-index: 10;
-  font-family: "Courier New";
+  font-family: monospace;
   background-color: #6c757d;
   color: lightgreen;
 }
@@ -223,5 +223,5 @@ iframe {
   top: 0;
   left: 0;
   color: darkgreen;
-  font-family: "Courier New";
+  font-family: monospace;
 }
