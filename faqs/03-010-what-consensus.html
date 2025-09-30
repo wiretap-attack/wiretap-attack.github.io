@@ -1,0 +1,2 @@
+What is the consensus seed?
+The consensus seed is the master key used to derive all encryption keys within Secret Network. Users encrypt their data with public keys derived from the consensus seed, and the private keys are only available to the transaction validators. Secret ensures that the consensus seed is sealed solely within SGX enclaves by only providing it to the enclave via an encrypted, trusted channel. This channel is established using SGX attestation.

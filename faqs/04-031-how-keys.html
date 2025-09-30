@@ -1,0 +1,2 @@
+How did you obtain the cluster and master keys?
+We set up a local testnet and created a modified enclave that prints the cluster key upon receipt. Then, we forged an SGX quote to masquerade our modified enclave as a legitimate one and join a cluster. We registered a modified gatekeeper enclave with the same process and observed the master key is directly given to the gatekeeper once the chain approves it.

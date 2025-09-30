@@ -1,0 +1,2 @@
+How are Phat Contracts executed?
+Users submit phat contracts to specific groups of worker SGX enclaves, called a cluster. Each cluster has a cluster key used for encrypting phat contract data, and users use the public key to submit jobs. A worker enclave in a cluster uses the cluster key to decrypt the data and execute it.

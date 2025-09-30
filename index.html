@@ -1,35 +1,1167 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <title>WireTap</title>
+  <title>WireTap: Breaking Server SGX via DRAM Bus Interposition</title>
   <link rel="icon" type="image/x-icon" href="/img/favicon.png">
-  <meta property="og:title" content="WireTap" />
+  <meta property="og:title" content="WireTap: Breaking Server SGX via DRAM Bus Interposition" />
+  <meta property="og:description" content="Breaking Server SGX via DRAM Bus Interposition" />
   <meta property="og:url" content="https://wiretap.fail" />
-  <link rel="stylesheet" href="css/theme.css">
-
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-EY221VRDEF"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());  gtag('config', 'G-EY221VRDEF');
+    function gtag() {dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-EY221VRDEF');
+  </script>
+
+  <script>
+    function copy_to_clipboard() {
+      /* Get the text field */
+      var copyText = document.getElementById("citeTextarea");
+
+      /* Select the text field */
+      copyText.select();
+      copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+
+      /* Copy the text inside the text field */
+      document.execCommand("copy");
+    }
   </script>
 
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap and Font-Awesome -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css"
+    rel="stylesheet">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
+
+  <link href="css/theme.css" rel="stylesheet">
 </head>
+
 <body>
-  <div class="marquee-container">
-        <div class="marquee-content">
-            <span id="marquee-text-1"></span>
-            <span id="marquee-text-2"></span>
+  <div>
+    <button class="btn" id="cursor" style="display: none;">Leak Some Bits?</button>
+  </div>
+  <div class="container">
+    <section id="abstract">
+      <div class="row justify-content-center">
+        <div class="col-11">
+          <div class="card">
+            <div class="card-body">
+              <div class="container">
+                <div class="row justify-content-center align-items-center">
+                  <div class="col-auto">
+                    <img class="img-fluid" src="img/wiretap-logo.png" id="logo" alt="WireTap.fail Logo"
+                      style="max-height: 400px; display: block; margin-left: auto; margin-right: auto;" />
+                  </div>
+                  <div class="col-auto">
+                    <h1 class="text-left">WireTap:</h1>
+                    <h2 class="text-left">Breaking Server SGX via DRAM Bus Interposition</h2>
+                  </div>
+                </div>
+              </div>
+
+              <p class="card-text" style="margin-top: 2rem;">
+              <p>
+                Intel's Software Guard eXtensions (SGX) is a hardware feature in Intel servers that aims to offer strong integrity and confidentiality properties for software, even in the presence of root-level attackers.
+				To put it simply, even if the server is hacked and taken over by root-level attackers, it should be impossible to extract data that is protected by SGX. Thus, given its strong security guarantees, SGX is used by many systems to protect sensitive customer data such as cryptocurrency transactions and private messages.
+              </p>
+              <p>
+                In this work we show that SGX is not impervious. More specifically, we show how one can build a device to physically inspect all memory traffic inside a computer cheaply and easily, in environments with only basic electrical tools, and using equipment easily purchased on the internet. Using our interposer device against SGX's attestation mechanism, we are able to extract an SGX secret attestation key from a machine in fully trusted status, thereby breaching SGX's security.
+              </p>
+              <p>
+              Finally, we study the real world implications of such breaches on SGX-backed blockchain deployments. Here, we show end-to-end attacks on both confidentiality and integrity guarantees of deployments with multi-million dollar market caps, allowing attackers to disclose confidential transactions or illegitimately obtain transaction rewards.
+              </p>
+            </div>
+
+            <div class="card-footer text-center w-100">
+              <a href="files/wiretap.pdf" class="btn btn-primary mr-2"><i class="fa fa-file"></i> Read
+                the Paper</a>
+
+              <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#cite-wiretap"><i
+                  class="fa fa-quote-right"></i> Cite</a>
+            </div>
+
+            <div class="modal fade" id="cite-wiretap" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+              aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Cite WireTap</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+
+                  <div class="modal-body">
+                    <textarea class="form-control rounded-0" id="citeTextarea" rows="8" readonly>
+@inproceedings{wiretap,
+    title     = {WireTap: Breaking Server SGX via DRAM Bus Interposition},
+    booktitle = {2025 SIGSAC Conference on Computer and Communications Security (CCS '25)},
+    author    = {Alex Seto and Oytun Kuday Duran and Samy Amer and Jalen Chuang and Stephan van Schaik and Daniel Genkin and Christina Garman},
+    url       = {https://wiretap.fail},
+    publisher = {Association for Computing Machinery},
+    year      = {2025},
+}</textarea>
+                  </div>
+
+                  <div class="modal-footer">
+                    <a href="javascript:copy_to_clipboard()" class="btn btn-primary mr-auto"><i class="fa fa-clipboard"
+                        aria-hidden="true"></i> Copy to clipboard</a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-  </div>
-  <div class="container" style="display: flex; justify-content: center; align-items: center; min-height: 100vh; width: 100vw; margin: auto; left: 0; right: 0; position: absolute;">
-    <img class="img-fluid" src="img/logo.png" id="logo" alt="WireTap Logo" style="width: 100vw;" />
+      </div>
+
+    </section>
   </div>
 
+  <div class="container">
+    <section id="demos">
+      <h4 style="padding-top: 20px;">Demos</h4>
+
+      <h5 class="gray">Capturing DRAM Bus Traffic Using a Logic Analyzer</h5>
+      <p>
+          We use a logic analyzer to capture DRAM bus traffic, observing reads and writes to encrypted memory belonging to SGX. The top images show our actual setup and DDR4 interposer. On the bottom we show how our setup captures a memory read operation, which consists first of a row activation, then a read command, and finally the encrypted read data itself.
+      </p>
+      <div class="row justify-content-center align-items-center">
+        <div class="row justify-content-center align-items-center">
+          <div class="col-5" style="margin-right: 16px;">
+            <h5 class="gray">Logic Analyzer Setup</h5>
+            <div class="row justify-content-center">
+              <img src="img/la.jpg" style="max-width: 100%;">
+            </div>
+          </div>
+          <div class="col-5">
+            <h5 class="gray">DDR4 DIMM Interposer</h5>
+            <div class="row justify-content-center">
+              <img src="img/interposer.jpg" style="max-width: 100%;">
+            </div>
+          </div>
+        </div>
+        <div class="col-10 embed-responsive embed-responsive-16by9" style="margin-top: 16px;">
+          <video class="embed-responsive-item" poster="video/demo1.png" src="video/demo1.mp4" controls muted
+            style="max-width: 100%;"></video>
+        </div>
+      </div>
+
+      <h5 class="gray">Deterministic Encryption in Intel Total Memory Encryption</h5>
+      <p>
+        The image below demonstrates the existence of deterministic memory encryption on Intel servers supporting SGX, which allows us to build our attack. We show three writes to memory. The first writes zeros to memory, the second writes ones, and the third writes zeros again. Notice how the first and last writes result in the same encrypted memory being written to physical memory. This is how we observe deterministic encryption, which is insecure.
+      </p>
+      <div class="row justify-content-center align-items-center">
+        <div class="col-10">
+              <div class="row justify-content-center">
+                <img src="img/demo2.png" style="max-width: 100%;">
+              </div>
+        </div>
+      </div>
+
+      <h5 class="gray">Recovering an Intel SGX Quoting Enclave ECDSA Signing Key</h5>
+      <p>
+        We now demonstrate a full key recovery against Intel SGX's Quoting Enclave (QE), recovering an ECDSA signing key that can be used to sign arbitrary SGX enclave reports. We recover the nonce and thus signing key from a single quote signing operation in a fully automated manner.
+      </p>
+      <div class="row justify-content-center align-items-center">
+        <div class="col-10">
+          <div class="embed-responsive embed-responsive-16by9">
+            <video class="embed-responsive-item" poster="video/demo3.png" src="video/demo3.mp4" controls
+              muted style="max-width: 100%;"></video>
+          </div>
+        </div>
+      </div>
+
+      <h5 class="gray">Forged SGX Quote</h5>
+      <p>
+        Finally, we provide a forged SGX quote utilizing our extracted key. This SGX quote can be successfully verified using <a href="https://github.com/intel/SGX-TDX-DCAP-QuoteVerificationLibrary">Intel's DCAP Quote Verification Library</a> (we note the SWHardeningNeeded status is the best possible trust level for the CPU model). This quote contains invalid measurements of 0x1337..., which is not possible in an authentic SGX report. The quote, associated collateral (information required to verify the quote), and scripts to verify the quote on a Linux system are provided for download below.
+      </p>
+      <h2 style="text-align: center;"><b><a class="fail"
+            href="files/wiretap_quote.zip">Download</a></b></h2>
+      <pre>
+# Usage:
+# Build the Intel Quote Verification Library
+./build_qvl.sh
+# Attest the quote - returns STATUS_TCB_SW_HARDENING_NEEDED
+./attest.sh
+# Optionally view quote information with third-party Gramine library
+# docker run -v ./:/data -it gramineproject/gramine "gramine-sgx-quote-view /data/quote.bin"
+#   mr_enclave       : 0d250d250d250d250d250d250d250d250d250d250d250d250d250d250d250d25
+#   mr_signer        : 1337133713371337133713371337133713371337133713371337133713371337
+      </pre>
+    </section>
+
+    <section id="people">
+      <h4 style="padding-top: 20px;">The People Behind
+        <span style="color: #014366;">WireTap</span>
+      </h4>
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-md-6">
+            <ul>
+              <li>
+                <a href="#">Alex Seto</a>
+                <span class="badge badge-purdue">
+                  <a class="univ" href="https://www.purdue.edu/">Purdue University</a>
+                </span>
+              </li>
+              <li>
+                <a href="https://www.linkedin.com/in/oytunkuday/">Oytun Kuday Duran</a>
+                <span class="badge badge-gatech">
+                  <a class="univ" href="https://www.gatech.edu/">Georgia Institute of Technology</a>
+                </span>
+              </li>
+
+              <li>
+                <a href="https://www.linkedin.com/in/samy-amer-859697171/">Samy Amer</a>
+                <span class="badge badge-gatech">
+                  <a class="univ" href="https://www.gatech.edu/">Georgia Institute of Technology</a>
+                </span>
+              </li>
+
+              <li>
+                <a href="https://gt.rsp.rip">Jalen Chuang</a>
+                <span class="badge badge-gatech">
+                  <a class="univ" href="https://www.gatech.edu/">Georgia Institute of Technology</a>
+                </span>
+              </li>
+
+
+              <li>
+                <a href="https://codentium.com/about">Stephan van Schaik</a>
+                <span class="badge badge-umich">
+                  <a class="univ" href="https://codentium.com/about">van Schaik, LLC</a>
+                </span>
+              </li>
+
+             <li>
+                <a href="https://genkin.io">Daniel Genkin</a>
+                <span class="badge badge-gatech">
+                  <a class="univ" href="https://www.gatech.edu/">Georgia Institute of Technology</a>
+                </span>
+              </li>
+
+              <li>
+                <a href="https://www.cs.purdue.edu/homes/clg">Christina Garman</a>
+                <span class="badge badge-purdue">
+                  <a class="univ" href="https://www.purdue.edu/">Purdue University</a>
+                </span>
+              </li>
+            </ul>
+          </div>
+          <div class="col-md-6">
+            <h2 style="text-align: center;"><b><a class="fail"
+                  href="https://architecture.fail/">architecture.fail</a></b></h2>
+            <h2 style="text-align: center;"><b><a class="fail"
+                  href="https://barc.cs.purdue.edu/">Purdue BARC</a></b></h2>
+            <p style="text-align: center;">Check out our lab websites!</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <p style="text-align: center;"><b>Contact us at <a
+                  href="mailto:wiretap-attack@googlegroups.com">wiretap-attack@googlegroups.com</a></b></p>
+            <br>
+            <div class="row justify-content-center align-items-center" style="margin-top: -20px; margin-bottom: -20px;">
+              <div class="col-lg-2 col-4" style="text-align: center;">
+                <img class="img-fluid" src="img/purdue.png" alt="Purdue University"
+                  style="padding: 10px; max-height: 100px;" />
+              </div>
+              <div class="col-lg-5" style="text-align: center;">
+                <img class="img-fluid" src="img/gatech.png" alt="Georgia Institute of Technology"
+                  style="max-height: 100px;" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="qa">
+      <h4 style="padding-top: 20px;">Frequently Asked <span style="color: #014366;">Questions</span></h4>
+
+
+      <div id="accordion">
+        <div class="card">
+          <div id="question-0-0">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-0-0"
+                aria-expanded="true" aria-controls="answer-0-0">
+                What is DRAM?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-0-0" class="collapse" aria-labelledby="question-0-0">
+            <div class="card-body">
+              <p>
+                DRAM typically refers to the memory modules physically installed on your computer motherboard. They are grouped into DIMMs, which look something like this:
+                <img src="img/dimm.png" style="max-width: 100%;">
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="accordion">
+        <div class="card">
+          <div id="question-0-1">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-0-1"
+                aria-expanded="true" aria-controls="answer-0-1">
+                What is interposition? What is an interposer?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-0-1" class="collapse" aria-labelledby="question-0-1">
+            <div class="card-body">
+              <p>
+                An interposer is a link that sits between two electrical interfaces; in our case, between the motherboard and DRAM. We then attach the interposer to a logic analyzer, which is a piece of equipment that allows us to see and record signals passing through the interposer, namely our computer's memory accesses and the data associated with them.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="accordion">
+        <div class="card">
+          <div id="question-0-2">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-0-2"
+                aria-expanded="true" aria-controls="answer-0-2">
+                Can I build this myself? How much does it cost?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-0-2" class="collapse" aria-labelledby="question-0-2">
+            <div class="card-body">
+              <p>
+                Yes, please check out our paper for full details on our interposer design and build. You'll need some components and a soldering iron. Overall this project should cost you under $1000, including the logic analyzer.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="accordion">
+        <div class="card">
+          <div id="question-0-3">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-0-3"
+                aria-expanded="true" aria-controls="answer-0-3">
+                What does the interposition setup let you do?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-0-3" class="collapse" aria-labelledby="question-0-3">
+            <div class="card-body">
+              <p>
+                In short, it lets us see what your computer reads and writes from memory. If your memory has secret data, we can see it as well.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="accordion">
+        <div class="card">
+          <div id="question-0-4">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-0-4"
+                aria-expanded="true" aria-controls="answer-0-4">
+                Why did you solder it manually? Can't you just design a PCB?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-0-4" class="collapse" aria-labelledby="question-0-4">
+            <div class="card-body">
+              <p>
+                It was simpler for us to solder components to existing risers rather than design a PCB from scratch. That said, if you would like to help us out and design one, do email us at <a href="mailto:wiretap-attack@googlegroups.com">wiretap-attack@googlegroups.com</a>.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h4 style="padding-top: 20px;">SGX and WireTap</h4>
+
+      <div id="accordion">
+        <div class="card">
+          <div id="question-1-0">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-1-0"
+                aria-expanded="true" aria-controls="answer-1-0">
+                What is Intel SGX?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-1-0" class="collapse" aria-labelledby="question-1-0">
+            <div class="card-body">
+              <p>
+                Intel Software Guard eXtensions (SGX) is a set of extensions present in recent Intel server CPUs to provide a hardware-backed Trusted Execution Environment (TEE). In short, even if the server gets hacked and completely taken over, the attacker should still not be able to peek inside SGX and observe the data in it. To that aim, SGX isolates trusted code and resources in spaces known as enclaves, which are protected from attackers with root-level access. As part of the isolation, SGX ensures that software attackers cannot see memory or CPU state of executing enclaves. SGX aims to allow users to run their code and data on remote servers with assurance that computation executes in a trusted manner, and cannot be hacked.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="accordion">
+        <div class="card">
+          <div id="question-1-1">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-1-1"
+                aria-expanded="true" aria-controls="answer-1-1">
+                How practical are these attacks?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-1-1" class="collapse" aria-labelledby="question-1-1">
+            <div class="card-body">
+              <p>
+                We have successfully extracted attestation keys, which are the primary mechanism used to determine whether code is running under SGX. This allows any hacker to masquerade as genuine SGX hardware, while in fact running code in an exposed manner and peeking into your data. We demonstrate concrete security breaks on real-world software utilizing SGX, such as <a href="https://scrt.network/">Secret Network</a>, <a href="https://docs.phala.com/network">Phala</a>, <a href="https://crust.network/">Crust</a>, and <a href="https://www.integritee.network/">IntegriTEE</a>.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="accordion">
+        <div class="card">
+          <div id="question-1-2">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-1-2"
+                aria-expanded="true" aria-controls="answer-1-2">
+                Do I need a lab environment for this?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-1-2" class="collapse" aria-labelledby="question-1-2">
+            <div class="card-body">
+              <p>
+                No. Check out the bill of materials in our paper, but in general all you need is some computer components and a soldering iron.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="accordion">
+        <div class="card">
+          <div id="question-1-3">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-1-3"
+                aria-expanded="true" aria-controls="answer-1-3">
+                Wait, isn't SGX memory encrypted?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-1-3" class="collapse" aria-labelledby="question-1-3">
+            <div class="card-body">
+              <p>
+                Yes, but as the memory encryption is deterministic, we are able to build a mapping between encrypted memory and its corresponding unencrypted memory. Although we cannot decrypt arbitrary memory, this encryption oracle is sufficient to break the security of constant-time cryptographic code.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="accordion">
+        <div class="card">
+          <div id="question-1-4">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-1-4"
+                aria-expanded="true" aria-controls="answer-1-4">
+                Remind me what deterministic encryption is again?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-1-4" class="collapse" aria-labelledby="question-1-4">
+            <div class="card-body">
+              <p>
+                When encryption is deterministic, a given plaintext and key will result in a fixed ciphertext over every execution. In other words, (for a given key) there is a bijective relationship between inputs and encrypted outputs. Practically speaking, this means if we see a ciphertext value multiple times, we know the corresponding plaintext memory was the same every time. Similarly, if we determine what plaintext a ciphertext value corresponds to, we can always map this value to our known plaintext.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="accordion">
+        <div class="card">
+          <div id="question-1-5">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-1-5"
+                aria-expanded="true" aria-controls="answer-1-5">
+                What is attestation?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-1-5" class="collapse" aria-labelledby="question-1-5">
+            <div class="card-body">
+              <p>
+                In the context of Trusted Execution Environments (TEEs) such as SGX, attestation is a guarantee that code is running on genuine hardware and is thus protected by it. In SGX, it validates that the hardware running the enclave is made by Intel and is up-to-date, and that a specific enclave was run securely and produced a given output.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="accordion">
+        <div class="card">
+          <div id="question-1-6">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-1-6"
+                aria-expanded="true" aria-controls="answer-1-6">
+                Who uses attestation and why? What can you do now that you extracted the attestation key?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-1-6" class="collapse" aria-labelledby="question-1-6">
+            <div class="card-body">
+              <p>
+                Attestation is used by any party that wishes to verify properties of an enclave execution such as its code, output, or environment. Attestation relies on cryptographic digital signatures rooted in signature keys held by Intel, which ensures a chain of trust from the execution of the enclave on a specific CPU to Intel itself.
+                </p>
+                <p>
+                Since we extracted the CPU's secret attestation key, we break this chain of trust. We can masquerade as a real enclave while in fact running outside of SGX protections, allowing us to read enclave data and even fake its output. The implications of this breach are dependent on the specific system that uses SGX. For applications like Secret it means decrypting all of the network's confidential transactions, while for services like Crust we can fake file storage and collect rewards without actually storing anything.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="accordion">
+        <div class="card">
+          <div id="question-1-7">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-1-7"
+                aria-expanded="true" aria-controls="answer-1-7">
+                Can I detect if someone uses your setup against me?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-1-7" class="collapse" aria-labelledby="question-1-7">
+            <div class="card-body">
+              <p>
+                If you are a server operator, you might see scary people with logic analyzers near your server racks. However, once the attack is completed, it is very hard to detect in hindsight, as properly forged SGX attestation quotes are indistinguishable from legitimate ones.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="accordion">
+        <div class="card">
+          <div id="question-1-8">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-1-8"
+                aria-expanded="true" aria-controls="answer-1-8">
+                Has anyone been using this in the wild?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-1-8" class="collapse" aria-labelledby="question-1-8">
+            <div class="card-body">
+              <p>
+                As far as we are aware, this attack has not been used in the wild.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="accordion">
+        <div class="card">
+          <div id="question-1-9">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-1-9"
+                aria-expanded="true" aria-controls="answer-1-9">
+                Are there mitigations for WireTap? Is SGX secure now?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-1-9" class="collapse" aria-labelledby="question-1-9">
+            <div class="card-body">
+              <p>
+                WireTap is considered by Intel to be outside the threat model, as SGX offers no protections against physical attacks. Thus, there are no current mitigations besides running servers in secure physical environments. At the time of publication SGX running on Scalable Xeon servers is vulnerable to memory interposition attacks and we expect this will remain the case in the foreseeable future.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="accordion">
+        <div class="card">
+          <div id="question-1-10">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-1-10"
+                aria-expanded="true" aria-controls="answer-1-10">
+                So what can I do if I want to protect against WireTap?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-1-10" class="collapse" aria-labelledby="question-1-10">
+            <div class="card-body">
+              <p>
+                We emphasize that SGX aims to defend against software attackers, and the party owning the physical SGX hardware must be trusted. We recommend the usage of cloud providers that you trust and that provide independent physical security. WireTap primarily affects parties which allow any entity to be trusted as long as they run SGX hardware.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="accordion">
+        <div class="card">
+          <div id="question-1-11">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-1-11"
+                aria-expanded="true" aria-controls="answer-1-11">
+                What CPUs are affected by this? Why are some CPUs affected and not others?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-1-11" class="collapse" aria-labelledby="question-1-11">
+            <div class="card-body">
+              <p>
+                We have tested our attack on 3rd Generation Intel Xeon Scalable Processors. While these support a large Enclave Page Cache (EPC), they also use TME (total memory encryption) for SGX, which itself uses deterministic encryption. </p> <p> Older SGX platforms such as those from Intel's Core and Xeon-E families are not affected, as these use Intel's Memory Encryption (Intel ME) engine, which does not use deterministic memory encryption. However, these platforms also support a much smaller EPC and are about to be deprecated. </p> <p> Next, we are not sure about Xeon-D CPUs, but suspect they also use TME and thus vulnerable to our techniques. Finally, 4th and 5th Generation Intel Xeon Scalable Processors require DDR5 memory, and thus are not vulnerable to our current work. Stay tuned however for more news! 😉
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="accordion">
+        <div class="card">
+          <div id="question-1-12">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-1-12"
+                aria-expanded="true" aria-controls="answer-1-12">
+                I've heard about the <a href="https://batteringram.eu/">BatteringRAM</a> attack, how is this different?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-1-12" class="collapse" aria-labelledby="question-1-12">
+            <div class="card-body">
+              <p>
+                WireTap has a similar effect to <a href="https://batteringram.eu">BatteringRAM</a>, and both teams independently discovered their attacks simultaneously without being aware of each other. Like two sides of the same coin, WireTap and BatteringRAM look at complimentary properties of deterministic encryption. While WireTap focuses mainly on breaching confidentiality, BatteringRAM focuses mostly on integrity. The bottom line is the same however, both SGX and SEV are easy to break using memory interposition.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="accordion">
+        <div class="card">
+          <div id="question-1-13">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-1-13"
+                aria-expanded="true" aria-controls="answer-1-13">
+                What about other systems such as Intel TDX or AMD SEV? What about DDR5?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-1-13" class="collapse" aria-labelledby="question-1-13">
+            <div class="card-body">
+              <p>
+                Our work only studies SGX on DDR4 systems. For a similar concurrent work studying both SGX and SEV we invite you to checkout BatteringRAM. However, both SGX and even DDR4 memory is antiquated by now, replaced by newer systems supporting TDX and DDR5. Stay tuned to hear about our work for those systems 😉.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h4 style="padding-top: 20px;">Secret Network</h4>
+
+      <div id="accordion">
+        <div class="card">
+          <div id="question-2-0">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-2-0"
+                aria-expanded="true" aria-controls="answer-2-0">
+                What is <a href="https://scrt.network/">Secret Network</a>?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-2-0" class="collapse" aria-labelledby="question-2-0">
+            <div class="card-body">
+              <p>
+                <a href="https://scrt.network/">Secret Network</a> is a blockchain that provides transaction confidentiality for the execution of smart contracts. This security is provided by only executing transactions within SGX enclaves, which are given access to the necessary encryption keys to decrypt transaction data.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="accordion">
+        <div class="card">
+          <div id="question-2-1">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-2-1"
+                aria-expanded="true" aria-controls="answer-2-1">
+                What is the consensus seed?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-2-1" class="collapse" aria-labelledby="question-2-1">
+            <div class="card-body">
+              <p>
+                The consensus seed is the master key used to derive all encryption keys within Secret Network. Users encrypt their data with public keys derived from the consensus seed, and the private keys are only available to the transaction validators. Secret ensures that the consensus seed is sealed solely within SGX enclaves by only providing it to the enclave via an encrypted, trusted channel. This channel is established using SGX attestation.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="accordion">
+        <div class="card">
+          <div id="question-2-2">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-2-2"
+                aria-expanded="true" aria-controls="answer-2-2">
+                How did you obtain the consensus seed?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-2-2" class="collapse" aria-labelledby="question-2-2">
+            <div class="card-body">
+              <p>
+                Any machine can join the Secret Network as a validator as long as it can provide a valid SGX attestation quote containing the node's public encryption key within the attestation report. Once it joins, the node can receive the consensus seed encrypted with its public key. We obtain the consensus seed from the network by forging an SGX attestation quote with our extracted attestation key, and used it to join the Secret test network with a key of our choosing, without ever actually executing an SGX enclave.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="accordion">
+        <div class="card">
+          <div id="question-2-3">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-2-3"
+                aria-expanded="true" aria-controls="answer-2-3">
+                What can you do with the consensus seed?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-2-3" class="collapse" aria-labelledby="question-2-3">
+            <div class="card-body">
+              <p>
+                With the consensus seed, an attacker can decrypt all transactions on the Secret Network.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="accordion">
+        <div class="card">
+          <div id="question-2-4">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-2-4"
+                aria-expanded="true" aria-controls="answer-2-4">
+                Can you steal money?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-2-4" class="collapse" aria-labelledby="question-2-4">
+            <div class="card-body">
+              <p>
+                No. All funds are safe. We only investigated Secret's test network and did not affect the consensus mechanism.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="accordion">
+        <div class="card">
+          <div id="question-2-5">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-2-5"
+                aria-expanded="true" aria-controls="answer-2-5">
+                What mitigations are in place for Secret Network?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-2-5" class="collapse" aria-labelledby="question-2-5">
+            <div class="card-body">
+              <p>
+                Following our disclosure, Secret has limited enrollment of new nodes to only trusted operators. They also rotated the consensus seed.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="accordion">
+        <div class="card">
+          <div id="question-2-6">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-2-6"
+                aria-expanded="true" aria-controls="answer-2-6">
+                So what should Secret's users do?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-2-6" class="collapse" aria-labelledby="question-2-6">
+            <div class="card-body">
+              <p>
+                At this moment there is nothing for you to do. Your money is safe. There will be changes coming to how Secret works however, so stay tuned.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="accordion">
+        <div class="card">
+          <div id="question-2-7">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-2-7"
+                aria-expanded="true" aria-controls="answer-2-7">
+                I run a similar SGX-based cryptocurrency, what should I learn from this?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-2-7" class="collapse" aria-labelledby="question-2-7">
+            <div class="card-body">
+              <p>
+                We recommend not allowing arbitrary entities to join as trusted nodes, instead requiring further permissions to obtain trusted status. For example, nodes may be required to be hosted on trusted cloud providers, or operators can be manually vetted.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h4 style="padding-top: 20px;">Phala Network</h4>
+
+      <div id="accordion">
+        <div class="card">
+          <div id="question-3-0">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-3-0"
+                aria-expanded="true" aria-controls="answer-3-0">
+                What is <a href="https://docs.phala.com/network">Phala Network</a>?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-3-0" class="collapse" aria-labelledby="question-3-0">
+            <div class="card-body">
+              <p>
+                <a href="https://docs.phala.com/network">Phala Network</a> offers confidential computing on top of a decentralized blockchain. Users can execute arbitrary <i>phat contracts</i>, Phala-specific smart contracts which additionally provide confidentiality of execution input, output, and state. Phala Network utilizes SGX for phat contract execution.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="accordion">
+        <div class="card">
+          <div id="question-3-1">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-3-1"
+                aria-expanded="true" aria-controls="answer-3-1">
+                So what can you do with Phat Contracts?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-3-1" class="collapse" aria-labelledby="question-3-1">
+            <div class="card-body">
+              <p>
+                Phat Contracts, unlike normal smart contracts, do not execute directly on the blockchain and instead execute within SGX enclaves. By executing in SGX instead of the blockchain, phat contracts are able to interact with the wider world (such as the internet and other blockchains), along with offering faster compute capabilities. Execution data is kept private within an SGX enclave, and the trusted SGX enclave code ensures the phat contract is executed honestly.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="accordion">
+        <div class="card">
+          <div id="question-3-2">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-3-2"
+                aria-expanded="true" aria-controls="answer-3-2">
+                How are Phat Contracts executed?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-3-2" class="collapse" aria-labelledby="question-3-2">
+            <div class="card-body">
+              <p>
+                Users submit phat contracts to specific groups of worker SGX enclaves, called a cluster. Each cluster has a cluster key used for encrypting phat contract data, and users use the public key to submit jobs. A worker enclave in a cluster uses the cluster key to decrypt the data and execute it.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="accordion">
+        <div class="card">
+          <div id="question-3-3">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-3-3"
+                aria-expanded="true" aria-controls="answer-3-3">
+                What is the cluster key and master key?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-3-3" class="collapse" aria-labelledby="question-3-3">
+            <div class="card-body">
+              <p>
+                The cluster key pair is used to encrypt and decrypt transaction data sent to the cluster. The cluster keys are derived from a single master key, which is only available to special SGX enclaves called gatekeepers. Gatekeepers are approved by vote on-chain.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="accordion">
+        <div class="card">
+          <div id="question-3-4">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-3-4"
+                aria-expanded="true" aria-controls="answer-3-4">
+                How did you obtain the cluster and master keys?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-3-4" class="collapse" aria-labelledby="question-3-4">
+            <div class="card-body">
+              <p>
+                We set up a local testnet and created a modified enclave that prints the cluster key upon receipt. Then, we forged an SGX quote to masquerade our modified enclave as a legitimate one and join a cluster. We registered a modified gatekeeper enclave with the same process and observed the master key is directly given to the gatekeeper once the chain approves it.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="accordion">
+        <div class="card">
+          <div id="question-3-5">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-3-5"
+                aria-expanded="true" aria-controls="answer-3-5">
+                What can you do with the cluster and master keys?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-3-5" class="collapse" aria-labelledby="question-3-5">
+            <div class="card-body">
+              <p>
+                With the cluster key, we can decrypt the contents of any transaction sent to the cluster we belong to. We observed that as Phala Network only has a single cluster, this would affect all transactions. With the master key, we can derive all current and future cluster keys, obtaining all transaction data on the network.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h4 style="padding-top: 20px;">Crust Network</h4>
+
+      <div id="accordion">
+        <div class="card">
+          <div id="question-4-0">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-4-0"
+                aria-expanded="true" aria-controls="answer-4-0">
+                What is <a href="https://crust.network/">Crust</a>?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-4-0" class="collapse" aria-labelledby="question-4-0">
+            <div class="card-body">
+              <p>
+                <a href="https://crust.network/">Crust</a> is a decentralized storage service built on top of a blockchain and other storage providers such as IPFS. Crust utilizes SGX enclaves to provide proof of storage of files and file integrity.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="accordion">
+        <div class="card">
+          <div id="question-4-1">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-4-1"
+                aria-expanded="true" aria-controls="answer-4-1">
+                How does Crust store files?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-4-1" class="collapse" aria-labelledby="question-4-1">
+            <div class="card-body">
+              <p>
+                Users upload files to a decentralized network such as IPFS and pay a fee for Crust workers to store the file for a period of time. Crust workers use an SGX enclave to manage data and prove that the file is fully stored and served in unmodified form. The Crust blockchain periodically rewards storage workers with cryptocurrency based on how much data they can prove they are storing. Additionally, all storage space is filled with verifiable random data which ensures the worker truly has the amount of storage it advertises.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="accordion">
+        <div class="card">
+          <div id="question-4-2">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-4-2"
+                aria-expanded="true" aria-controls="answer-4-2">
+                How did you join Crust as a malicious worker with WireTap?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-4-2" class="collapse" aria-labelledby="question-4-2">
+            <div class="card-body">
+              <p>
+                As Crust uses the attestation report to determine if an attempt to join the network is made from a genuine SGX enclave with unmodified code, we forge an attestation quote on a modified version of the Crust enclave code.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="accordion">
+        <div class="card">
+          <div id="question-4-3">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-4-3"
+                aria-expanded="true" aria-controls="answer-4-3">
+                What can you do as a malicious storage provider?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-4-3" class="collapse" aria-labelledby="question-4-3">
+            <div class="card-body">
+              <p>
+                As an attacker, we are able to advertise an arbitrarily large amount of free storage, which allows us to accept any storage job. When we accept a storage job, we do not have to truly store the file as we can bypass the proof of storage work with our modified Crust enclave. Because of this, an attacker can claim a file is stored faster than any honest worker, and claim both the initial storage payment and continuous fees without actually doing work.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h4 style="padding-top: 20px;">IntegriTEE</h4>
+
+      <div id="accordion">
+        <div class="card">
+          <div id="question-5-0">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-5-0"
+                aria-expanded="true" aria-controls="answer-5-0">
+                What is <a href="https://www.integritee.network/">IntegriTEE</a>?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-5-0" class="collapse" aria-labelledby="question-5-0">
+            <div class="card-body">
+              <p>
+                <a href="https://www.integritee.network/">IntegriTEE</a> is a project offering various TEE-backed services to the blockchain community. IntegriTEE's SGX offerings include Attesteer, which verifies remote attestation of off-chain workers, and TEEracle, which provides smart contracts access to off-chain data through trusted SGX enclaves.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="accordion">
+        <div class="card">
+          <div id="question-5-1">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-5-1"
+                aria-expanded="true" aria-controls="answer-5-1">
+                What is Attesteer?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-5-1" class="collapse" aria-labelledby="question-5-1">
+            <div class="card-body">
+              <p>
+                Attesteer provides an API for performing attestation of SGX enclaves and maintaining a registry of trusted workers. When users wish to attest a service registered with Attesteer, they can query it directly, rather than going through Intel's full remote attestation process.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="accordion">
+        <div class="card">
+          <div id="question-5-2">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-5-2"
+                aria-expanded="true" aria-controls="answer-5-2">
+                What is TEEracle?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-5-2" class="collapse" aria-labelledby="question-5-2">
+            <div class="card-body">
+              <p>
+                TEEracle is a service that can be integrated with blockchains to provide <i>oracle</i> services to smart contracts. Smart contracts cannot normally interact with entities outside the blockchain, so oracles provide this off-chain information. TEEracle uses SGX enclaves attested by Attesteer to provide oracles where users can be assured the results are authentic and not manipulated by the oracle.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="accordion">
+        <div class="card">
+          <div id="question-5-3">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-5-3"
+                aria-expanded="true" aria-controls="answer-5-3">
+                How did you register with Attesteer as a malicious enclave?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-5-3" class="collapse" aria-labelledby="question-5-3">
+            <div class="card-body">
+              <p>
+                As Attesteer relies on Intel's Quoting Enclave attestation, our attestation key is able to forge attestation quotes to be submitted to an attester. As Attesteer records public keys of trusted services, we are able to register our own arbitrary public key with our forged quote as an SGX enclave.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="accordion">
+        <div class="card">
+          <div id="question-5-4">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-5-4"
+                aria-expanded="true" aria-controls="answer-5-4">
+                What can you do with a malicious Attesteer registration?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-5-4" class="collapse" aria-labelledby="question-5-4">
+            <div class="card-body">
+              <p>
+                This will vary by use case. In one use case, an attacker can access all data sent a worker which correctly passes attestation. In another other case, the attacker can execute off-chain work inauthentically and return arbitrary data to on-chain queries without the user being able to determine that an attacker was involved.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h4 style="padding-top: 20px;">Miscellaneous</h4>
+
+      <div id="accordion">
+        <div class="card">
+          <div id="question-6-0">
+            <h6>
+              <button class="btn btn-link collapsed text-left" data-toggle="collapse" data-target="#answer-6-0"
+                aria-expanded="true" aria-controls="answer-6-0">
+                Can I use the logo?
+              </button>
+            </h6>
+          </div>
+          <div id="answer-6-0" class="collapse" aria-labelledby="question-6-0">
+            <div class="card-body">
+              <p>
+                Yes, with rights waived via <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>. You can download the logo as a <a href="img/wiretap-logo.png" download>PNG</a> or <a href="img/wiretap-logo.svg" download>SVG</a>.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="acknowledgments">
+      <h4>Acknowledgments</h4>
+      <div class="block">
+        <p>
+          This research was supported by
+          the Air Force Office of Scientific Research (AFOSR) under award number FA9550-24-1-0079;
+          the Alfred P Sloan Research Fellowship;
+          and gifts from Qualcomm, Zama and Zellic.
+          <br><br>
+          The views and conclusions contained in this document are those of the authors and should not
+          be interpreted as representing the official policies, either expressed or implied, of the
+          U.S. Government.
+        </p>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <div class="text-center w-100">
+      <span>Copyright &copy; 2025 Purdue University and Georgia Institute of Technology. All rights reserved.</span>
+    </div>
+  </footer>
+
+  <!-- Cite breaks without older Bootstrap -->
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
   <script src="cursor.js"></script>
-</body>
-</html>
 
+</body>
+
+</html>

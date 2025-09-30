@@ -1,39 +1,227 @@
 body {
-    margin: 0;
-    font-family: monospace;
-    color: #00ff41;
-    background-color: darkgray;
-    overflow: hidden; /* Hide horizontal scrollbar */
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  font-size: 13pt;
 }
 
-.marquee-container {
-    width: 100%;
-    overflow: hidden; /* This is essential for the marquee effect */
-    border: 2px solid #00ff41;
-    white-space: nowrap;
+.btn,
+.btn-primary:active {
+  /* background: #ffaa00; */
+  background: #014366;
+  border: #000000;
+  border-radius: 10px;
 }
 
-.marquee-content {
-    display: inline-block;
-    animation: marquee-animation 15s linear infinite;
+a {
+  color: #636363;
+  font-weight: 400;
+  text-decoration: none;
 }
 
-.marquee-content:hover {
-    animation-play-state: paused; /* Pause on hover */
+.fail {
+  color: #b1060e;
+  font-family: 'Poppins';
 }
 
-.marquee-content span {
-    font-size: 2em;
-    padding: 0 0; /* Space between characters */
+.news {
+  max-height: 40px;
+  max-width: 150px;
+  margin-right: 10px;
 }
 
-@keyframes marquee-animation {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(-50%); /* Scroll a full content length */
-    }
+.gray {
+  color: #636363;
 }
 
+.badge {
+  color: #ffffff;
+  background: #ec7300;
+}
 
+h1 {
+  font-weight: 400;
+  font-size: 3em;
+  color: #014366;
+}
+
+h2 {
+  font-size: 2em;
+  font-weight: 300;
+}
+
+h4 {
+  font-size: 1.5em;
+  font-weight: bolder;
+  margin-top: 20px;
+  margin-bottom: 0;
+  width: 100%;
+}
+
+h5 {
+  padding-top: 15px;
+  padding-bottom: 0;
+  margin-bottom: 0.5em;
+  font-weight: 600;
+}
+
+#abstract>div {
+  margin-top: 20px;
+}
+
+#abstract .card {
+  background: #f8fcff;
+}
+
+#people>div {
+  margin-top: 20px;
+}
+
+.question,
+.block {
+  margin-top: 20px;
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+#accordion .card {
+  border: none;
+  margin-top: 10px;
+}
+
+#accordion .btn,
+#accordion .btn-link {
+  background: none;
+  border: none;
+  color: #000;
+  padding-bottom: 0;
+  font-size: 1em;
+  text-decoration: none;
+}
+
+#accordion .btn:before {
+  font-family: FontAwesome;
+  content: "\f077";
+  color: #000;
+  margin-right: 0.5em;
+}
+
+#accordion .btn.collapsed:before {
+  content: "\f078";
+}
+
+#accordion .card .card-body {
+  margin-top: 1em;
+  margin-left: 1em;
+  padding: 0;
+}
+
+footer {
+  background: #014366;
+  color: white;
+  font-size: 0.9em;
+  margin-top: 20px;
+  padding: 0.5em;
+  position: absolute;
+  left: 0;
+  right: 0;
+  width: 100%;
+}
+
+.modal-body {
+  text-align: left;
+}
+
+.jumbotron {
+  padding-top: 30px !important;
+  padding-bottom: 20px !important;
+}
+
+:focus {
+  outline: 0 !important;
+  box-shadow: 0 0 0 0 rgba(0, 0, 0, 0) !important;
+}
+
+.action {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.action:hover {
+  color: #ffffff;
+}
+
+li {
+  margin: 10px 0;
+}
+
+.button-wrapper .btn {
+  margin-bottom: 5px;
+}
+
+.badge {
+  margin-left: 5px;
+}
+
+.badge-gatech {
+  background-color: #b3a369;
+}
+
+.badge-umich {
+  background-color: #00274c;
+}
+
+.badge-purdue {
+  background-color: #000;
+}
+
+.badge-rub {
+  background-color: #17365c;
+}
+
+.univ {
+  color: #ffffff;
+}
+
+.univ:hover {
+  color: #ffffff;
+}
+
+iframe {
+  display: block;
+  margin: auto;
+}
+
+.accordion-body {
+  margin-left: 30px;
+}
+
+.description {
+  color: rgb(0, 0, 0);
+}
+
+.mitigation {
+  border: 4px solid black;
+}
+
+#cursor {
+  position: fixed;
+  top: 1vh;
+  left: 1vw;
+  z-index: 10;
+  font-family: "Courier New";
+  background-color: #6c757d;
+  color: lightgreen;
+}
+
+.cursor-bit {
+  position: fixed;
+  display: block;
+  pointer-events: none;
+  z-index: 100000;
+  font-size: 30px;
+  will-change: transform;
+  top: 0;
+  left: 0;
+  color: darkgreen;
+  font-family: "Courier New";
+}
